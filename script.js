@@ -42,21 +42,21 @@ input.addEventListener("keydown",
     },
     false
 );
+
 input.addEventListener("input",function(){
     noresult.style.display="none";
 });
 
 btnmode.addEventListener("click",function (){
     if(darkmode==false){
-        darkmodeproperty();
+        darkModeProperties();
     }
     else{
-        lightmodeproperty();
+        lightModeProperties();
     }
 });
 
 //FUNCTIONS
-
 //API calls
 function getUserData(gitUrl){
     fetch (gitUrl)
@@ -72,10 +72,10 @@ function getUserData(gitUrl){
 
 //RENDER
 function updateProfile(data){
-    if(data.message !=="Not Found"){
+    if(data.message !== "Not Found"){
         noresult.style.display ="none";
-        function chechNull(param1,param2){
-            if(param1===""|| param2===null){
+        function checkNull(param1,param2){
+            if(param1==="" || param1=== null){
                 param2.style.opacity =0.5;
                 param2.previousElementSibling.style.opacity=0.5;
                 return false;
@@ -84,19 +84,19 @@ function updateProfile(data){
                 return true;
             }
         }
-        avatar.src=`${data.avatar_url}`;
-        userName.innerText =data.name ===null?data.login : data.name;
-        user.innerText =`${data.login}`;
-        user.href =`${data.html_url}`;
-        datasegments =data.created_at.split("T").shift().split("-");
-        date.innerText =`Joined ${datasegments[2]} ${months[datesegments[1] -1]} ${datasegments[0]}`;
-        bio.innerText =data.bio ==null? "This profile has no bio ":`${data.bio}`;
-        repos.innerText =`${data.public_repos}`;
-        followers.innerText =`${data.followers};`
-        following.innerText=`${data.following}`;
+        avatar.src = `${data.avatar_url}`;
+        userName.innerText = data.name === null ? data.login : data.name;
+        user.innerText = `@${data.login}`;
+        user.href = `${data.html_url}`;
+        datesegments = data.created_at.split("T").shift().split("-");
+        date.innerText = `Joined ${datesegments[2]} ${months[datesegments[1] - 1]} ${datesegments[0]}`;
+        bio.innerText = data.bio == null ? "This profile has no bio" : `${data.bio}`;
+        repos.innerText = `${data.public_repos}`;
+        followers.innerText = `${data.followers}`;
+        following.innerText = `${data.following}`;
         user_location.innerText = checkNull(data.location, user_location) ? data.location : "Not Available";
-        page.innerText = checkNull(data.blog, page) ? data.blog : "Not Available";
-        page.href = checkNull(data.blog, page) ? data.blog : "#";
+        // page.innerText = checkNull(data.blog, page) ? data.blog : "Not Available";
+        // page.href = checkNull(data.blog, page) ? data.blog : "#";
         twitter.innerText = checkNull(data.twitter_username, twitter) ? data.twitter_username : "Not Available";
         twitter.href = checkNull(data.twitter_username, twitter) ? `https://twitter.com/${data.twitter_username}` : "#";
         company.innerText = checkNull(data.company, company) ? data.company : "Not Available";
@@ -108,14 +108,14 @@ function updateProfile(data){
 }
 
 //SWITCH TO DARK MODE -activatedarkmode()
-function darkmodeproperty(){
+function darkModeProperties(){
     root.setProperty("--lm-bg" ,"#141D2F");
     root.setProperty("--lm-bg-content" ,"#1E2A47");
     root.setProperty("--lm-text","white");
     root.setProperty("--lm-text-all","white");
     root.setProperty("--lm-shadow-xl","rgba(70,88,109,0.15)");
     modetext.innerText="LIGHT";
-    modeicon.src="images/sun-icon.svg";
+    // modeicon.src="images/sun-icon.svg" ;
     root.setProperty("--lm-icon-bg","brightness(1000%)");
     darkmode=true;
     localStorage.setItem("dark-mode",true); 
@@ -128,28 +128,40 @@ function lightModeProperties() {
     root.setProperty("--lm-text-alt", "#2B3442");
     root.setProperty("--lm-shadow-xl", "rgba(70, 88, 109, 0.25)");
     modetext.innerText = "DARK";
-    modeicon.src = "images/moon-icon.svg" ;
+    // modeicon.src = "images/moon-icon.svg" ;
     
-    root.setProperty("--lm-icon-bg", "brightness(100%)");
+    root.setProperty("--lm-icon-bg", "brightness(1000%)");
     darkmode = false;
     localStorage.setItem("dark-mode", false);
   }
 
   //INITIALIZE UI
-  function init(){
+function init(){
     darkmode =false;
 
-    const prefersDarkMode =widow.matchMedia && widow.matchMedia("(prefers-color-scheme:dark)").matches;
-    if(localStorage.getItem("dark-mode")){
-        darkmode=localStorage.getItem("dark-mode");
-        darkmodeproperties();
-    }
-    else{
-        localStorage.setItem("dark-mode",prefersDarkMode);
-        darkMode=prefersDarkMode;
+    // const prefersDarkMode =widow.matchMedia && widow.matchMedia("(prefers-color-scheme:dark)").matches;
+    // if(localStorage.getItem("dark-mode")){
+    //     darkmode=localStorage.getItem("dark-mode");
+    //     darkmodeproperties();
+    // }
+    // else{
+    //     localStorage.setItem("dark-mode",prefersDarkMode);
+    //     darkMode=prefersDarkMode;
+    //     lightModeProperties();
+    // }
+
+    const value =localStorage.getItem("dark-mode");
+    if(value===null){
+        localStorage.setItem("dark-mode",darkmode)
         lightModeProperties();
     }
-    getUserData(url +"thepranaygupta");
-  }
+    else if(value ==="true"){
+        darkModeProperties();
+    }
+    else if (value==="false"){
+        lightModeProperties();
+    }
+    getUserData(url +"aayushtyagi4");
+}
 
-  init();
+init();
